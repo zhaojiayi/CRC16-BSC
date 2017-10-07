@@ -6,7 +6,7 @@
 
 using namespace std;
 
-//´ÓÎÄ±¾¶ÁÈë
+//ä»æ–‡æœ¬è¯»å…¥
 //CRC16::CRC16() {
 //	ifstream fin ("test.txt");
 //	if (!fin.is_open()) {
@@ -35,13 +35,13 @@ CRC16::CRC16(int a) {
 		}
 	}
 	num[i] = '\0';
-	is_change = false;//³õÊ¼»¯Îªfalse
+	is_change = false;//åˆå§‹åŒ–ä¸ºfalse
 	is_error = false;
 	state = a;
 }
 
 void CRC16::get_crc() {
-	unsigned short tmp = (unsigned short)(0xFFFF);//³õÊ¼»¯16¸ö¼Ä´æÆ÷Îª1
+	unsigned short tmp = (unsigned short)(0xFFFF);//åˆå§‹åŒ–16ä¸ªå¯„å­˜å™¨ä¸º1
 	for (int i = 0; i<blockLength; i++)
 	{
 		tmp ^= (unsigned short)(num[i]);
@@ -50,7 +50,7 @@ void CRC16::get_crc() {
 			if (tmp & 1)
 			{
 				tmp >>= 1;
-				tmp ^= 0xA001;//0x8005µÄ·´ÏòÉú³ÉÊ½
+				tmp ^= 0xA001;//0x8005çš„åå‘ç”Ÿæˆå¼
 			}
 			else
 			{
@@ -58,18 +58,18 @@ void CRC16::get_crc() {
 			}
 		}
 	}
-	crc[1] = tmp&0x00FF;//CRCµÍÎ»
-	crc[0] = (tmp >> 8) & 0xFF;//CRC¸ßÎ»
+	crc[1] = tmp&0x00FF;//CRCä½ä½
+	crc[0] = (tmp >> 8) & 0xFF;//CRCé«˜ä½
 }
 
-void CRC16::add_crc() {//½«CRCÂë¼ÓÔÚºóÁ½×Ö½Ú
-	num[blockLength] = crc[1];//µÍÎ»ÔÚÇ°
-	num[blockLength + 1] = crc[0];//¸ßÎ»ÔÚºó£¬ÕâÀï±»¿ÓÁËºÜ¾Ã
+void CRC16::add_crc() {//å°†CRCç åŠ åœ¨åä¸¤å­—èŠ‚
+	num[blockLength] = crc[1];//ä½ä½åœ¨å‰
+	num[blockLength + 1] = crc[0];//é«˜ä½åœ¨åï¼Œè¿™é‡Œè¢«å‘äº†å¾ˆä¹…
 }
 
 /**************************************************************************
-º¯Êı£ºUniform()
-¹¦ÄÜ£º²úÉú0-1¼ä¾ùÔÈ·Ö²¼µÄËæ»úÊı
+å‡½æ•°ï¼šUniform()
+åŠŸèƒ½ï¼šäº§ç”Ÿ0-1é—´å‡åŒ€åˆ†å¸ƒçš„éšæœºæ•°
 ***************************************************************************/
 
 double CRC16::Uniform()
@@ -84,15 +84,15 @@ double CRC16::Uniform()
 	return u;
 }
 
-void CRC16::after_bsc_channel(double prob) {//¾­¹ıBSCĞÅµÀ
+void CRC16::after_bsc_channel(double prob) {//ç»è¿‡BSCä¿¡é“
 	for (int i = 0; i < blockLength + 2; i++) {
 		unsigned char byte = 0;
 		for (int j = 0; j < 8; j++) {
 			unsigned char tmp = num[i] & (0x80 >> j);
-			unsigned char check = Uniform() < prob;//ÖØÒªÒ»²½ 
+			unsigned char check = Uniform() < prob;//é‡è¦ä¸€æ­¥ 
 			unsigned char check1 = (check)<<(7-j);
 			byte = (tmp^check1) | byte;
-			if (check == 1)//0±ä1»ò1±ä0µÄÇé¿ö
+			if (check == 1)//0å˜1æˆ–1å˜0çš„æƒ…å†µ
 				is_change = true;
 		}
 		crc_dec[i] = byte;
@@ -101,7 +101,7 @@ void CRC16::after_bsc_channel(double prob) {//¾­¹ıBSCĞÅµÀ
 
 
 void CRC16::check_error() {
-	unsigned short tmp = (unsigned short)(0xFFFF);//³õÊ¼»¯16¸ö¼Ä´æÆ÷Îª1
+	unsigned short tmp = (unsigned short)(0xFFFF);//åˆå§‹åŒ–16ä¸ªå¯„å­˜å™¨ä¸º1
 	for (int i = 0; i<blockLength+2; i++)
 	{
 		tmp ^= (unsigned short)(crc_dec[i]);
@@ -110,7 +110,7 @@ void CRC16::check_error() {
 			if (tmp & 1)
 			{
 				tmp >>= 1;
-				tmp ^= 0xA001;//0x8005µÄ·´ÏòÉú³ÉÊ½
+				tmp ^= 0xA001;//0x8005çš„åå‘ç”Ÿæˆå¼
 			}
 			else
 			{
@@ -118,7 +118,7 @@ void CRC16::check_error() {
 			}
 		}
 	}
-	if (tmp == 0) //ÓàÊ½Îª0£¬Ğ£ÑéÎŞ²î´í
+	if (tmp == 0) //ä½™å¼ä¸º0ï¼Œæ ¡éªŒæ— å·®é”™
 		is_error = false;
 	else
 		is_error = true;
@@ -128,7 +128,7 @@ bool CRC16::is_errors() {
 	return is_error;
 }
 
-bool CRC16::is_changes() {//bitÊÇ·ñ³ö´í
+bool CRC16::is_changes() {//bitæ˜¯å¦å‡ºé”™
 	return is_change;
 }
 

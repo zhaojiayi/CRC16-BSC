@@ -1,8 +1,8 @@
 #ifndef C_R_C_H
 #define C_R_C_H
 
-const int blockLength = 1024 / 8;//ÏûÏ¢Î»
-//¶¨ÒåÒ»Ğ©³£Êı
+const int blockLength = 1024 / 8;//æ¶ˆæ¯ä½
+//å®šä¹‰ä¸€äº›å¸¸æ•°
 const int A = 48271;
 const long M = 2147483647;
 const int Q = M / A;
@@ -10,22 +10,22 @@ const int R = M % A;
 
 class CRC16 {
 private:
-	long int state;//Ä¬ÈÏÖÖ×Ó
+	long int state;//é»˜è®¤ç§å­
 	unsigned char num[blockLength + 2];
-	unsigned char crc[2]; //´æ´¢16Î»Ğ£ÑéÎ»
-	unsigned char crc_dec[blockLength + 2];//¾­¹ıĞÅµÀºóµÄÂë
+	unsigned char crc[2]; //å­˜å‚¨16ä½æ ¡éªŒä½
+	unsigned char crc_dec[blockLength + 2];//ç»è¿‡ä¿¡é“åçš„ç 
 	bool is_change;
 	bool is_error;
 public:
-	CRC16(int a);//»ñÈ¡ĞÅÏ¢Î»²¢Ëæ»úÉú³É×Ö·û´®
+	CRC16(int a);//è·å–ä¿¡æ¯ä½å¹¶éšæœºç”Ÿæˆå­—ç¬¦ä¸²
 	void get_crc();
 	void add_crc();
 	double Uniform();
 	void after_bsc_channel(double prob);
 	void check_error();
 	void free();
-	bool is_errors();//ÏûÏ¢ÊÇ·ñ³ö´í
-	bool is_changes();//bitÊÇ·ñ³ö´í
+	bool is_errors();//æ¶ˆæ¯æ˜¯å¦å‡ºé”™
+	bool is_changes();//bitæ˜¯å¦å‡ºé”™
 	unsigned char* val2() {
 	return crc_dec;
 	}
